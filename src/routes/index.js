@@ -19,7 +19,7 @@ router.get("/artistas", async (req, res) => {
   }
 });
 
-///CARGAR DATOS
+/// CARGAR DATOS
 router.post("/artistas", async (req, res) => {
   const body = req.body;
   await db.collection("artistas").add({
@@ -31,6 +31,27 @@ router.post("/artistas", async (req, res) => {
     canciones: body.canciones,
   });
   res.send("Cargado con exito");
+});
+
+/// OBTENER UN ARTISTA
+router.get("/artistas/:id", async (req, res) => {
+  const id = req.params.id;
+  const datos = await db.collection("artistas").doc(id).get();
+  res.send(datos.data());
+});
+
+/// MODIFICAR
+router.put("/artistas/:id", async (req, res) => {
+  const id = req.params.id;
+  await db.collection("artistas").doc(id).update(req.body);
+  res.send("Datos modificados");
+});
+
+/// ELIMINAR
+router.delete("/artistas/:id", async (req, res) => {
+  const id = req.params.id;
+  await db.collection("artistas").doc(id).delete();
+  res.send("Eliminado");
 });
 
 module.exports = router;
